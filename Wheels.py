@@ -70,9 +70,6 @@ draw_wheel(current_angle)
 result_label = tk.Label(root, text="", font=("Arial", 16))
 result_label.pack(pady=10)
 
-# Крутка (УЖАС)
-spinning = False
-
 def spin():
     global current_angle
 
@@ -88,8 +85,9 @@ def spin():
 
     # Перерисовка колеса
     draw_wheel(current_angle)
-
-    result_label.confg(text=f"Выпало: {winner}")
+    
+    #Показываем результат
+    result_label.config(text=f"Выпало: {winner}")
 
 # Кнопка
 btn = tk.Button(root, text="Крутить", font=("Arial", 14), command=spin)
