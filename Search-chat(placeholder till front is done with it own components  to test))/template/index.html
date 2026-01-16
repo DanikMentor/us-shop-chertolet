@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Product Search with Chat Assistant</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+<body>
+    <header>
+        <div class="header-content">
+        <h1>Product Explorer</h1>
+        <p>Search through our catalog with intelligent filtering</p>
+        </div>
+    </header>
+    <div class="container">
+<!-- Main Content Area -->
+    <div class="main-content">
+<!-- Search Section -->
+    <div class="search-section">
+    <div class="search-bar">
+    <input type="text"
+    id="searchInput"
+    class="search-input"
+    placeholder="Search products by name or description...">
+<button id="searchBtn" class="search-btn">Search</button>
+</div>
+<div class="filters">
+<div class="filter-group">
+<label for="categoryFilter">Category</label>
+<select id="categoryFilter" class="filter-select">
+<option value="all">All Categories</option>
+{% for category in categories %}
+<option value="{{ category }}">{{ category }}</option>
+{% endfor %}
+</select>
+</div>
+<div class="filter-group">
+<label for="minPrice">Min Price ($)</label>
+<input type="number" id="minPrice" class="filter-input" placeholder="0"
+min="0">
+</div>
+<div class="filter-group">
+<label for="maxPrice">Max Price ($)</label>
+<input type="number" id="maxPrice" class="filter-input" placeholder="1000"
+min="0">
+</div>
+</div>
+</div>
+<!-- Products Display -->
+<div id="productsContainer">
+<div class="products-grid" id="productsGrid">
+{% for product in products %}
+<div class="product-card">
+<span class="product-category">{{ product.category }}</span>
+<h3 class="product-name">{{ product.name }}</h3>
+<div class="product-price">${{ "%.2f"|format(product.price) }}</div>
+<p class="product-description">{{ product.description }}</p>
+</div>
+{% endfor %}
+</div>
+</div>
+</div>
+<!-- Chat Sidebar -->
+<div class="chat-sidebar">
+<div class="chat-container">
+<div class="chat-header">
+<h3>Assistant Bot</h3>
+<p>Ask me anything about our products!</p>
+</div>
+<div class="chat-messages" id="chatMessages">
+<div class="message bot-message">
+Hello! I'm your shopping assistant. How can I help you today?
+</div>
+</div>
+<div class="quick-questions">
+<h4>Quick Questions:</h4>
+<div class="question-buttons">
+{% for option in chat_responses %}
+<button class="question-btn" onclick="sendQuickQuestion('{{ option }}')">
+{{ option|capitalize }}
+</button>
+{% endfor %}
+</div>
+</div>
+<div class="chat-input">
+<input type="text"
+id="chatInput"
+placeholder="Type your question..."
+onkeypress="if(event.key === 'Enter') sendMessage()">
+<button onclick="sendMessage()">Send</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+// Search functionality
+document.getElementById('searchBtn').addEventListener('click', performSearch);
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
+if (e.key === 'Enter') performSearch();
+});
+// Filter event listeners
+document.getElementById('categoryFilter').addEventListener('change', performSearch);
+document.getElementById('minPrice').addEventListener('change', performSearch);
+document.getElementById('maxPrice').addEventListener('change', performSearch);
+async function performSearch() {
+const query = document.getElementById('searchInput').value;
+const category = document.getElementById('categoryFilter').value;
+const minPrice = document.getElementById('minPrice').value;
+const maxPrice = document.getElementById('maxPrice').value;
+const formData = new FormData();
+formData.append('query', query);
+formData.append('category', category);
+formData.append('min_price', minPrice);
+formData.append('max_price', maxPrice);
+try {
+const response = await fetch('/search', {
+method: 'POST',
+body: formData
+});
+const data = await response.json();
+updateProducts(data.products);
+} catch (error) {
+console.error('Search error:', error);
+}
+}
+function updateProducts(products) {
+const productsGrid = document.getElementById('productsGrid');
+if (products.length === 0) {
+productsGrid.innerHTML = `
+<div class="no-results">
+<h3>No products found</h3>
+<p>Try adjusting your search criteria or filters</p>
+</div>
+`;
+return;
+}
+productsGrid.innerHTML = products.map(product => `
+<div class="product-card">
+<span class="product-category">${product.category}</span>
+<h3 class="product-name">${product.name}</h3>
+<div class="product-price">$${product.price.toFixed(2)}</div>
+<p class="product-description">${product.description}</p>
+</div>
+`).join('');
+}
+// Chat functionality
+function sendMessage() {
+const input = document.getElementById('chatInput');
+const message = input.value.trim();
+if (message) {
+addMessage(message, 'user');
+input.value = '';
+fetch('/chat', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+},
+body: JSON.stringify({ message: message })
+})
+.then(response => response.json())
+.then(data => {
+addMessage(data.response, 'bot');
+});
+}
+}
+function sendQuickQuestion(question) {
+document.getElementById('chatInput').value = question;
+sendMessage();
+}
+function addMessage(text, sender) {
+const messagesDiv = document.getElementById('chatMessages');
+const messageDiv = document.createElement('div');
+messageDiv.className = `message ${sender}-message`;
+messageDiv.textContent = text;
+messagesDiv.appendChild(messageDiv);
+messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+// Auto-search when filters change (with debounce)
+let searchTimeout;
+['minPrice', 'maxPrice'].forEach(id => {
+document.getElementById(id).addEventListener('input', function() {
+clearTimeout(searchTimeout);
+searchTimeout = setTimeout(performSearch, 500);
+});
+});
+</script>
+</body>
+</html>
