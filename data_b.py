@@ -1,4 +1,3 @@
-# data_b.py
 import sqlite3
 
 def cr_d():
