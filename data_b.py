@@ -9,9 +9,9 @@ def cr_d():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         Name TEXT NOT NULL,
         Lastname TEXT NOT NULL,
-        Mail TEXT NOT NULL,
-        Phone_n TEXT NOT NULL,
-        Login TEXT NOT NULL,
+        Mail TEXT NOT NULL UNIQUE,
+        Phone_n TEXT NOT NULL UNIQUE,
+        Login TEXT NOT NULL UNIQUE,
         Password TEXT NOT NULL,
         Num_i_p TEXT NOT NULL,
         Bonus TEXT NOT NULL
@@ -34,3 +34,4 @@ def cr_d():
 
 if __name__ == "__main__":
     cr_d()
+
