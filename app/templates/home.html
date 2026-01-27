@@ -15,7 +15,7 @@
 
     <header>
         <a href="#" class="logo">
-            <img src="../img/photo_2026-01-27_18-45-25.jpg" class="logo2"> Chertolet.lv
+            <img src="{{ url_for('static', filename='img/photo_2026-01-27_18-45-25.jpg') }}" class="logo2"> Chertolet.lv
         </a>
         
         <nav class="nav-menu">
@@ -26,7 +26,7 @@
             <a href="#">Par mums</a>
         </nav>
 
-        <a href="/registration" class="btn-reg">Registrācija</a>
+        <a href="/register" class="btn-reg">Registrācija</a>
     </header>
 
     <main>
@@ -119,7 +119,7 @@
         <div class="footer-content">
             <div class="footer-col">
                 <a href="#" class="logo" style="margin-bottom: 20px;">
-                    <img src="../img/photo_2026-01-27_18-45-25.jpg"> Chertolet.lv
+                    <img src="{{ url_for('static', filename='img/photo_2026-01-27_18-45-25.jpg') }}"> Chertolet.lv
                 </a>
                 <p>
                     For over 10 years, we’ve been helping people buy and sell cars safely, offering the best deals and fully verified vehicles.
