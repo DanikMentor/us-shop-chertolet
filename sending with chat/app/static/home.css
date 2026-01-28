@@ -104,6 +104,91 @@ main {
     flex: 1;
 }
 
+.search-bar {
+display: flex;
+align-items: center;
+gap: 0; 
+background: #ffffff;
+padding: 10px;
+border-radius: 50px; 
+box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+max-width: 900px;
+width: 100%;
+margin-left: 320px;
+border: 1px solid #ececec;
+transition: box-shadow 0.3s ease;
+}
+
+.search-bar:focus-within {
+box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+}
+
+
+.search-bar input,
+.search-bar select {
+border: none;
+background: transparent;
+padding: 15px 20px;
+font-size: 15px;
+outline: none;
+color: #333;
+border-right: 1px solid #eee; 
+}
+
+
+#max_price {
+border-right: none;
+}
+
+
+#query { flex: 2; } 
+#category { flex: 1; cursor: pointer; }
+#min_price, #max_price { flex: 0.8; }
+
+
+#search-btn {
+background: #2563eb; 
+color: white;
+border: none;
+padding: 15px 35px;
+border-radius: 40px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s ease;
+margin-left: 50px;
+}
+
+#search-btn:hover {
+background: #1d4ed8;
+transform: scale(1.02);
+box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Адаптация под мобильные устройства */
+@media (max-width: 768px) {
+.search-bar {
+flex-direction: column;
+border-radius: 20px;
+padding: 15px;
+gap: 10px;
+}
+
+.search-bar input,
+.search-bar select {
+width: 100%;
+border-right: none;
+border-bottom: 1px solid #eee;
+}
+
+#search-btn {
+width: 100%;
+margin-left: 0;
+margin-top: 10px;
+}
+
+}
+
+
 .hero-section {
     background: linear-gradient(to bottom, #1e293b 0%, var(--bg-light) 100%);
     padding: 60px 5% 40px;
