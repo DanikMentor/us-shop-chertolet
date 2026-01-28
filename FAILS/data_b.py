@@ -12,7 +12,7 @@ def cr_d():
         Mail TEXT NOT NULL UNIQUE,
         Phone_n TEXT NOT NULL UNIQUE,
         Num_i_p TEXT NOT NULL,
-        Bonus TEXT NOT NULL
+        Bonus INTEGER NOT NULL
     )
     """)
 
@@ -28,9 +28,20 @@ def cr_d():
     )
     """)
 
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS orders(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Login TEXT NOT NULL,
+        Phone_n TEXT NOT NULL,
+        Mail TEXT NOT NULL,
+        Delivery TEXT NOT NULL,
+        Adress_to_delivery TEXT NOT NULL,
+        Payment TEXT NOT NULL
+    )
+    """)
+
     conn.commit()
     conn.close()
 
 if __name__ == "__main__":
     cr_d()
-
