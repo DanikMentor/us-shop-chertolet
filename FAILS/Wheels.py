@@ -3,215 +3,208 @@ import random
 
 app = Flask(__name__)
 
-# Список участников и их шансы
-items = [
-    ("Никита", 1),
-    ("Арсений", 1),
-    ("Максон", 1),
-    ("Костя", 1),
-    ("Илья", 1),
-    ("Дима", 1),
-    ("Саша", 1),
-    ("Паша", 1),
+PRIZES = [
+    {"id": 0, "label": "10% OFF", "weight": 25, "color": "#e74c3c"},
+    {"id": 1, "label": "FREE COFFEE", "weight": 15, "color": "#3498db"},
+    {"id": 2, "label": "GIFT CARD", "weight": 10, "color": "#f1c40f"},
+    {"id": 3, "label": "ICE CREAM", "weight": 15, "color": "#9b59b6"},
+    {"id": 4, "label": "MOVIE TICKET", "weight": 8, "color": "#e67e22"},
+    {"id": 5, "label": "NO LUCK", "weight": 20, "color": "#95a5a6"},
+    {"id": 6, "label": "TSHIRT", "weight": 5, "color": "#2ecc71"},
+    {"id": 7, "label": "JACKPOT!", "weight": 2, "color": "#1abc9c"},
 ]
 
-total_weight = sum(weight for name, weight in items)
-
-# HTML
-HTML = """
+HTML_TEMPLATE = """
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Колесо фортуны</title>
-<style>
-body { 
-    text-align: center; 
-    font-family: sans-serif; 
-    margin-top: 50px; 
-}
-#wheel-container { 
-    position: relative; 
-    width: 400px; 
-    height: 400px; 
-    margin: auto; 
-}
-#wheel {
-    width: 100%; 
-    height: 100%; 
-    border-radius: 50%;
-    position: relative;
-    border: 3px solid #000;
-    overflow: hidden;
-    /* transition will be set dynamically per-spin for random speed */
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortune Wheel</title>
+    <style>
+        body {
+            background: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-/* Arrow pointer that indicates the winner (points toward the wheel) */
-#arrow {
-    position: absolute;
-    top: -20px;              /* adjust to place the arrow just above the wheel */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 18px solid transparent;
-    border-right: 18px solid transparent;
-    border-bottom: 26px solid #e33; /* arrow color */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    z-index: 5;
-}
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-/* labels placed around the wheel */
-.label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-origin: 0 0;
-    font-weight: bold;
-    white-space: nowrap;
-    padding: 2px 6px;
-    pointer-events: none;
-    color: #111;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
-}
+        /* Pointer on the right side */
+        .pointer {
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0; 
+            height: 0; 
+            border-top: 25px solid transparent;
+            border-bottom: 25px solid transparent;
+            border-right: 50px solid #ff4757;
+            z-index: 100;
+            filter: drop-shadow(-4px 0 4px rgba(0,0,0,0.5));
+        }
 
-button { 
-    margin-top: 20px; 
-    padding: 12px 30px;
-    font-size: 18px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-button[disabled] {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-button:hover:not([disabled]) { 
-    background-color: #218838;
-}
-#result { 
-    margin-top: 20px; 
-    font-size: 20px; 
-    font-weight: bold;
-    min-height: 24px;
-}
-</style>
+        .wheel-box {
+            position: relative;
+            width: 460px;
+            height: 460px;
+            border: 10px solid #222;
+            border-radius: 50%;
+            padding: 5px;
+            background: #222;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        canvas {
+            border-radius: 50%;
+            transition: transform 5s cubic-bezier(0.15, 0, 0.1, 1);
+        }
+
+        .ui {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        #spin-btn {
+            background: #27ae60;
+            border: none;
+            padding: 18px 50px;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #spin-btn:hover { background: #2ecc71; transform: translateY(-2px); }
+        #spin-btn:active { transform: translateY(0); }
+        #spin-btn:disabled { background: #444; cursor: not-allowed; box-shadow: none; }
+
+        #status {
+            margin-top: 25px;
+            height: 40px;
+            font-size: 26px;
+            font-weight: bold;
+            color: #f1c40f;
+            text-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+        }
+    </style>
 </head>
 <body>
-<div id="wheel-container">
-    <div id="arrow" aria-hidden="true"></div>
-    <div id="wheel">
-        <!-- Segments and labels will be generated by JavaScript -->
+
+    <div class="container">
+        <div class="pointer"></div>
+        <div class="wheel-box">
+            <canvas id="canvas" width="460" height="460"></canvas>
+        </div>
     </div>
-</div>
-<button id="spinBtn" onclick="spin()">Крутить</button>
-<div id="result"></div>
 
-<script>
-let currentRotation = 0;
+    <div class="ui">
+        <button id="spin-btn">Spin to Win</button>
+        <div id="status"></div>
+    </div>
 
-function createWheel() {
-    const wheel = document.getElementById('wheel');
-    wheel.innerHTML = ''; // clear
-    const items = {{ items|tojson }};
-    const totalWeight = items.reduce((sum, item) => sum + item[1], 0);
-    let startAngle = 0;
-    const gradientParts = [];
-    const radius = wheel.clientWidth / 2 * 0.75; // distance from center for labels
+    <script>
+        const prizes = {{ prizes|tojson }};
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const btn = document.getElementById('spin-btn');
+        const statusText = document.getElementById('status');
 
-    items.forEach(([name, weight], index) => {
-        const segmentAngle = (weight / totalWeight) * 360;
-        const endAngle = startAngle + segmentAngle;
-        const color = `hsl(${(index / items.length) * 360}, 70%, 70%)`;
-        gradientParts.push(`${color} ${startAngle}deg ${endAngle}deg`);
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const numSectors = prizes.length;
+        const arcSize = (2 * Math.PI) / numSectors;
 
-        // create label at middle angle
-        const mid = startAngle + segmentAngle / 2;
-        const label = document.createElement('div');
-        label.className = 'label';
-        // rotate to angle, move outward, then flip text if on bottom half
-        const flip = (mid > 90 && mid < 270) ? 180 : 0;
-        label.style.transform = `rotate(${mid}deg) translateX(${radius}px) rotate(${flip}deg)`;
-        label.innerText = name;
-        wheel.appendChild(label);
+        let rotation = 0;
 
-        startAngle = endAngle;
-    });
+        function drawWheel() {
+            prizes.forEach((prize, i) => {
+                const angle = i * arcSize;
+                
+                // Draw sector
+                ctx.beginPath();
+                ctx.fillStyle = prize.color;
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, centerX, angle, angle + arcSize);
+                ctx.lineTo(centerX, centerY);
+                ctx.fill();
+                ctx.strokeStyle = '#121212';
+                ctx.lineWidth = 2;
+                ctx.stroke();
 
-    wheel.style.background = `conic-gradient(${gradientParts.join(',')})`;
-}
-
-window.onload = createWheel;
-
-// basic spin function that requests server for a winner and rotates wheel to that segment
-function spin() {
-    const btn = document.getElementById('spinBtn');
-    if (btn.disabled) return;
-    btn.disabled = true;
-    document.getElementById('result').innerText = '';
-
-    fetch('/spin').then(r => r.json()).then(data => {
-        const wheel = document.getElementById('wheel');
-        const index = data.index;
-
-        // compute cumulative start angle for the chosen index (recompute here to match client rendering)
-        const items = {{ items|tojson }};
-        const totalWeight = items.reduce((sum, item) => sum + item[1], 0);
-        let startAngle = 0;
-        for (let i = 0; i < index; i++) {
-            startAngle += (items[i][1] / totalWeight) * 360;
+                // Draw text
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle + arcSize / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 16px Arial";
+                // Adjust text position inside the sector
+                ctx.fillText(prize.label, centerX - 30, 8);
+                ctx.restore();
+            });
         }
-        const segmentAngle = (items[index][1] / totalWeight) * 360;
-        const mid = startAngle + segmentAngle / 2;
 
-        // spin to land mid at top (arrow position at 0deg). add full rotations for effect
-        const spins = Math.floor(Math.random() * 4) + 4; // random full spins between 4 and 7
-        const jitter = (Math.random() * (segmentAngle/2) - (segmentAngle/4)); // small variation
-        const targetRotation = 360 * spins - mid + jitter;
+        async function spin() {
+            btn.disabled = true;
+            statusText.innerText = "Good Luck...";
+            
+            // Get winner from server
+            const response = await fetch('/get_winner');
+            const winner = await response.json();
 
-        // set a random duration (speed) per spin
-        const duration = (Math.random() * 3 + 3).toFixed(2); // 3.00 - 6.00 seconds
-        wheel.style.transition = `transform ${duration}s cubic-bezier(0.33, 1, 0.68, 1)`;
+            const spins = 360 * 6; // At least 6 full spins
+            const sectorDeg = 360 / numSectors;
+            
+            /* The pointer is at 0 degrees (right side).
+               To stop exactly at winner.id, we rotate the wheel so that
+               the winner sector is centered at 0 degrees.
+            */
+            const stopAt = 360 - (winner.id * sectorDeg) - (sectorDeg / 2);
+            
+            rotation += spins + (stopAt - (rotation % 360));
+            
+            canvas.style.transform = `rotate(${rotation}deg)`;
 
-        // apply rotation (accumulate to keep smooth multiple spins)
-        currentRotation += targetRotation;
-        wheel.style.transform = `rotate(${currentRotation}deg)`;
+            setTimeout(() => {
+                statusText.innerText = "YOU WON: " + winner.label;
+                btn.disabled = false;
+            }, 5200);
+        }
 
-        // wait for transition end to show result and re-enable button
-        const onEnd = (e) => {
-            if (e.propertyName !== 'transform') return;
-            document.getElementById('result').innerText = 'Победитель: ' + data.winner;
-            btn.disabled = false;
-            wheel.removeEventListener('transitionend', onEnd);
-        };
-        wheel.addEventListener('transitionend', onEnd);
-    }).catch(err => {
-        document.getElementById('result').innerText = 'Ошибка при запросе.';
-        document.getElementById('spinBtn').disabled = false;
-    });
-}
-</script>
+        btn.addEventListener('click', spin);
+        drawWheel();
+    </script>
 </body>
 </html>
 """
 
-@app.route("/")
-def home():
-    return render_template_string(HTML, items=items)
+@app.route('/')
+def index():
+    return render_template_string(HTML_TEMPLATE, prizes=PRIZES)
 
-@app.route("/spin")
-def spin():
-    names = [i[0] for i in items]
-    weights = [i[1] for i in items]
-    winner = random.choices(names, weights=weights, k=1)[0]
-    return jsonify({
-        "winner": winner,
-        "index": names.index(winner),
-        "count": len(names)
-    })
+@app.route('/get_winner')
+def get_winner():
+    weights = [p['weight'] for p in PRIZES]
+    winner = random.choices(PRIZES, weights=weights, k=1)[0]
+    return jsonify(winner)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
