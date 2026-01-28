@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chertolet.lv - auto pārdošana</title>
+    
+    <link rel="stylesheet" href="../static/home.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <img src="{{ url_for('static', filename='img/photo_2026-01-27_18-45-25.jpg') }}" class="logo2"> Chertolet.lv
+        </a>
+        
+        <nav class="nav-menu">
+            <a href="#">Catalog</a>
+            <a href="#">Pakalpojumi</a>
+            <a href="#">Credit</a>
+            <a href="#">Atsauksmes</a>
+            <a href="#">Par mums</a>
+        </nav>
+
+        <a href="/register" class="btn-reg">Registrācija</a>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <h1 class="hero-title">Find the car that’s perfect for you</h1>
+            <p class="hero-subtitle">More than 5,000 certified cars with warranty</p>
+        </section>
+
+        <section class="listings-container">
+            
+            <article class="car-card">
+                <div class="car-image">
+                    <img src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mercedes">
+                </div>
+                <div class="car-details">
+                    <div>
+                        <div class="car-header">
+                            <h2 class="car-title">Mercedes-Benz C-Class</h2>
+                            <span class="car-price">57 616 €</span>
+                        </div>
+                        <div class="car-meta">
+                            <span><i class="fa-regular fa-calendar"></i> 2020</span>
+                            <span><i class="fa-solid fa-road"></i> 45 000 кm</span>
+                            <span><i class="fa-solid fa-gas-pump"></i> 2.0 Л / Petrol</span>
+                        </div>
+                        <p class="car-desc">
+                            This vehicle is in pristine condition. Single owner, full service history, and full AMG Line specification. No accidents, no repainting. Open to any inspection.
+                        </p>
+                    </div>
+                    <div class="car-actions">
+                        <a href="#" class="btn-details">More detail</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="car-card">
+                <div class="car-image">
+                    <img src="https://ilc.su/o-kompanii/novosti/v-rossii-predstavlen-sovershenno-novyj-sedan-bmw-5-series-2024" alt="BMW">
+                </div>
+                <div class="car-details">
+                    <div>
+                        <div class="car-header">
+                            <h2 class="car-title">BMW 5 Series</h2>
+                            <span class="car-price">50 000 €</span>
+                        </div>
+                        <div class="car-meta">
+                            <span><i class="fa-regular fa-calendar"></i> 2021</span>
+                            <span><i class="fa-solid fa-road"></i> 30 000 кm</span>
+                            <span><i class="fa-solid fa-gas-pump"></i> 3.0 Л / Дизель</span>
+                        </div>
+                        <p class="car-desc">
+                            A luxury business-class sedan featuring xDrive all-wheel drive, Nappa leather interior, and laser headlights. Imported from Germany and fully customs cleared.
+                        </p>
+                    </div>
+                    <div class="car-actions">
+                        <a href="#" class="btn-details">More details</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="car-card">
+                <div class="car-image">
+                    <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Toyota">
+                </div>
+                <div class="car-details">
+                    <div>
+                        <div class="car-header">
+                            <h2 class="car-title">Toyota Camry</h2>
+                            <span class="car-price">47 000 €</span>
+                        </div>
+                        <div class="car-meta">
+                            <span><i class="fa-regular fa-calendar"></i> 2022</span>
+                            <span><i class="fa-solid fa-road"></i> 15 000 кm</span>
+                            <span><i class="fa-solid fa-gas-pump"></i> 2.5 Л / Petrol</span>
+                        </div>
+                        <p class="car-desc">
+                            A reliable Japanese sedan in like-new condition, covered by the official dealer warranty, with the Prestige Safety package.
+                        </p>
+                    </div>
+                    <div class="car-actions">
+                        <a href="#" class="btn-details">More details</a>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom: 20px;">
+                    <img src="{{ url_for('static', filename='img/photo_2026-01-27_18-45-25.jpg') }}"> Chertolet.lv
+                </a>
+                <p>
+                    For over 10 years, we’ve been helping people buy and sell cars safely, offering the best deals and fully verified vehicles.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>For buyers</h4>
+                <ul>
+                    <li><a href="#">Car catalog</a></li>
+                    <li><a href="#">Trade-in</a></li>
+                    <li><a href="#">Auto loan</a></li>
+                    <li><a href="#">Insurance</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacts</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> +371 11 111 111</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Jūrmala, Kauguri, 10</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@chertolet.lv</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Follow us on social media</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-vk"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Chertoler.lv. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

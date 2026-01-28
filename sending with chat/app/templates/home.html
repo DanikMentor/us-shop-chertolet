@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chertolet.lv - auto pārdošana</title>
+    
+    <link rel="stylesheet" href="../static/home.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">
+            <img src="{{ url_for('static', filename='img/photo_2026-01-27_18-45-25.jpg') }}" class="logo2"> Chertolet.lv
+        </a>
+        
+        <nav class="nav-menu">
+            <a href="#">Catalog</a>
+            <a href="#">Pakalpojumi</a>
+            <a href="#">Credit</a>
+            <a href="#">Atsauksmes</a>
+            <a href="#">Par mums</a>
+        </nav>
+
+        <a href="/register" class="btn-reg">Registrācija</a>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <h1 class="hero-title">Find the car that’s perfect for you</h1>
+            <p class="hero-subtitle">More than 5,000 certified cars with warranty</p>
+
+            <!-- Search bar with filters -->
+            <form id="search-form" class="search-bar" onsubmit="return false;">
+                <input type="text" id="query" name="query" placeholder="Search by model, brand..." />
+                <select id="category" name="category">
+                    <option value="all">All categories</option>
+                    {% if categories %}
+                        {% for cat in categories %}
+                            <option value="{{ cat }}">{{ cat }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <input type="number" id="min_price" name="min_price" placeholder="Min price" min="0" />
+                <input type="number" id="max_price" name="max_price" placeholder="Max price" min="0" />
+                <button id="search-btn" type="submit">Search</button>
+            </form>
+        </section>
+
+        <section class="listings-container" id="listings-container">
+            {# Render products from DB #}
+            {% for p in products %}
+            <article class="car-card">
+                <div class="car-image">
+                    <img src="{{ url_for('static', filename='img/default-car.jpg') }}" alt="{{ p.name }}">
+                </div>
+                <div class="car-details">
+                    <div>
+                        <div class="car-header">
+                            <h2 class="car-title">{{ p.name }}</h2>
+                            <span class="car-price">{{ p.price }} €</span>
+                        </div>
+                        <div class="car-meta">
+                            <span><i class="fa-solid fa-tag"></i> {{ p.category }}</span>
+                            <span><i class="fa-regular fa-calendar"></i> {{ p.date }}</span>
+                            <span><i class="fa-solid fa-percent"></i> {{ p.discount }}</span>
+                        </div>
+                        <p class="car-desc">
+                            {{ p.description }}
+                        </p>
+                    </div>
+                    <div class="car-actions">
+                        <a href="#" class="btn-details">More details</a>
+                    </div>
+                </div>
+            </article>
+            {% else %}
+            <p>No products found.</p>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom: 20px;">
+                    <img src="{{ url_for('static', filename='img/photo_2026-01-27_18-45-25.jpg') }}"> Chertolet.lv
+                </a>
+                <p>
+                    For over 10 years, we’ve been helping people buy and sell cars safely, offering the best deals and fully verified vehicles.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>For buyers</h4>
+                <ul>
+                    <li><a href="#">Car catalog</a></li>
+                    <li><a href="#">Trade-in</a></li>
+                    <li><a href="#">Auto loan</a></li>
+                    <li><a href="#">Insurance</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacts</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> +371 11 111 111</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Jūrmala, Kauguri, 10</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@chertolet.lv</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Follow us on social media</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-vk"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Chertoler.lv. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    // client-side search
+    const form = document.getElementById('search-form');
+    const listings = document.getElementById('listings-container');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const resp = await fetch('/search', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await resp.json();
+        renderResults(data.products || []);
+    });
+
+    function renderResults(products) {
+        // clearing results
+        listings.innerHTML = '';
+        if (!products.length) {
+            listings.innerHTML = '<p>No results found.</p>';
+            return;
+        }
+        products.forEach(p => {
+            const html = `
+            <article class="car-card">
+                <div class="car-image">
+                    <img src="/static/img/default-car.jpg" alt="${escapeHtml(p.name)}">
+                </div>
+                <div class="car-details">
+                    <div>
+                        <div class="car-header">
+                            <h2 class="car-title">${escapeHtml(p.name)}</h2>
+                            <span class="car-price">${escapeHtml(p.price)} €</span>
+                        </div>
+                        <div class="car-meta">
+                            <span>${escapeHtml(p.brand || '')}</span>
+                            <span>${escapeHtml(p.date || '')}</span>
+                            <span>${escapeHtml(p.discount || '')}</span>
+                        </div>
+                        <p class="car-desc">
+                            Category: ${escapeHtml(p.category || '')}
+                        </p>
+                    </div>
+                    <div class="car-actions">
+                        <a href="#" class="btn-details">More details</a>
+                    </div>
+                </div>
+            </article>
+            `;
+            listings.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+    </script>
+
+</body>
+</html>
