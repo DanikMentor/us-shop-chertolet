@@ -14,6 +14,21 @@ CHAT_RESPONSES = {
     "default": "I'm here to help! Try: hello, products, price, shipping, contact, hours."
 }
 
+DB_NAME = "data_b.db"
+def add_user_to_db(login_flask, password_flask, Email_flask, number_flask):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO users (Login, Password, Mail, Phone_n, Num_i_p, Bonus)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (login_flask, password_flask, Email_flask, number_flask, "0", "0"))
+
+
+    conn.commit()
+    conn.close()
+    return True
+
 def get_db():
     conn = sqlite3.connect("data_b.db")
     conn.row_factory = sqlite3.Row
@@ -51,9 +66,39 @@ def index():
         conn.close()
     return render_template("home.html", categories=categories, products=products)
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    # show form
+    if request.method == "GET":
+        return render_template("register.html")
+
+    # POST -> process registration
+    login_flask = (request.form.get("name") or "").strip()
+    Email_flask = (request.form.get("email") or "").strip().lower()
+    number_flask = (request.form.get("phone") or "").strip()
+    password_flask = (request.form.get("password") or "").strip()
+
+    # basic validation
+    if not login_flask or not Email_flask or not password_flask:
+        return render_template("register.html", error="Please fill in name, email and password.")
+    # check duplicate email
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("SELECT id FROM users WHERE lower(Mail) = ?", (Email_flask,))
+        if cur.fetchone():
+            conn.close()
+            return render_template("register.html", error="Email is already registered.")
+        conn.close()
+    except Exception:
+        # if DB check fails, still try to add and report generic error on failure
+        pass
+
+    try:
+        add_user_to_db(login_flask, password_flask, Email_flask, number_flask)
+        return render_template("register.html", success="Registration successful. You may now login.")
+    except Exception:
+        return render_template("register.html", error="Registration failed. Please try again.")
 
 @app.route("/search", methods=["POST"])
 def search():

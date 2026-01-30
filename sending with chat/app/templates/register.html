@@ -35,13 +35,18 @@
                     <h2>Create an account</h2>
                     <p>Join the Chertolet.lv community</p>
                 </div>
+                {% if success %}
+                <div class="auth-message success">{{ success }}</div>
+                {% elif error %}
+                <div class="auth-message error">{{ error }}</div>
+                {% endif %}
 
-                <form class="auth-form">
+                <form class="auth-form" method="POST" action="{{ url_for('register') }}">
                     <div class="input-group">
                         <label for="name">Your name</label>
                         <div class="input-wrapper">
                             <i class="fa-regular fa-user"></i>
-                            <input type="text" id="name" placeholder="Ivan" required>
+                            <input type="text" id="name" name="name" placeholder="Ivan" required>
                         </div>
                     </div>
 
@@ -49,7 +54,7 @@
                         <label for="email">Email adress</label>
                         <div class="input-wrapper">
                             <i class="fa-regular fa-envelope"></i>
-                            <input type="email" id="email" placeholder="name@example.com" required>
+                            <input type="email" id="email" name="email" placeholder="name@example.com" required>
                         </div>
                     </div>
 
@@ -57,7 +62,7 @@
                         <label for="phone">Phone number</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-phone"></i>
-                            <input type="tel" id="phone" placeholder="+371 11 111 111">
+                            <input type="tel" id="phone" name="phone" placeholder="+371 11 111 111">
                         </div>
                     </div>
 
@@ -65,7 +70,7 @@
                         <label for="password">Password</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-lock"></i>
-                            <input type="password" id="password" placeholder="Create a strong password" required>
+                            <input type="password" id="password" name="password" placeholder="Create a strong password" required>
                         </div>
                     </div>
 
