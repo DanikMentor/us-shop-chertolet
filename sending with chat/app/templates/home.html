@@ -194,6 +194,97 @@
             .replace(/'/g, '&#039;');
     }
     </script>
+    //CHAT placeholder
+    <div class="chat-slider" aria-hidden="false">
+    <div id="chatPanel" class="chat-panel" role="dialog" aria-label="Help chat">
+        <div id="chatHandle" class="chat-handle">
+        <strong>Help & Chat</strong>
+        <button id="chatToggleBtn" style="background:transparent;border:0;color:inherit;font-size:18px;">▲</button>
+        </div>
+        <div class="chat-body">
+        <div id="chatMessages" class="chat-messages"></div>
+        <div id="chatSuggestions" class="chat-suggestions">
+            {% if chat_options %}
+            {% for opt in chat_options %}
+                <button class="chat-suggestion" type="button" data-q="{{ opt }}">{{ opt }}</button>
+            {% endfor %}
+            {% endif %}
+        </div>
+        </div>
+        <div class="chat-input-row">
+        <input id="chatInput" class="chat-input" placeholder="Ask something or use a suggestion..." />
+        <button id="chatSend" class="chat-send">Send</button>
+        </div>
+    </div>
+    </div>
+
+    <script>
+    (function () {
+    const panel = document.getElementById('chatPanel');
+    const handle = document.getElementById('chatHandle');
+    const toggleBtn = document.getElementById('chatToggleBtn');
+    const input = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('chatSend');
+    const messages = document.getElementById('chatMessages');
+    const suggestions = document.getElementById('chatSuggestions');
+
+    function addMessage(text, who) {
+        const d = document.createElement('div');
+        d.className = 'chat-msg ' + (who === 'user' ? 'user' : 'bot');
+        d.textContent = text;
+        messages.appendChild(d);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    function toggleOpen() {
+        panel.classList.toggle('open');
+        toggleBtn.textContent = panel.classList.contains('open') ? '▼' : '▲';
+    }
+
+    handle.addEventListener('click', toggleOpen);
+    toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleOpen(); });
+
+    function sendQuery(q) {
+        if (!q) return;
+        addMessage(q, 'user');
+        input.value = '';
+        fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: q})
+        }).then(r => r.json())
+        .then(data => {
+        if (data && data.response) addMessage(data.response, 'bot');
+        if (data && data.options) {
+            suggestions.innerHTML = '';
+            data.options.forEach(opt => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'chat-suggestion';
+            b.dataset.q = opt;
+            b.textContent = opt;
+            suggestions.appendChild(b);
+            });
+        }
+        }).catch(err => {
+        addMessage("Sorry, something went wrong.", 'bot');
+        console.error(err);
+        });
+    }
+
+    sendBtn.addEventListener('click', () => sendQuery(input.value.trim()));
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); sendQuery(input.value.trim()); } });
+
+    // delegate suggestion clicks
+    suggestions.addEventListener('click', (e) => {
+        const btn = e.target.closest('.chat-suggestion');
+        if (!btn) return;
+        sendQuery(btn.dataset.q || btn.textContent);
+    });
+
+    // minimizing chat
+    })();
+    </script>
 
 </body>
 </html>

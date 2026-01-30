@@ -3,6 +3,17 @@ from app import app, models
 import sqlite3
 models.cr_d()
 
+# Simple chat responses
+CHAT_RESPONSES = {
+    "hello": "Hello! How can I help you today?",
+    "products": "We offer a wide range of products in Electronics, Furniture, Kitchen, and Office categories.",
+    "price": "Prices range from low to high. Use the price filter to narrow down your search.",
+    "shipping": "Shipping takes 3-5 business days. Free shipping on eligible orders.",
+    "contact": "You can contact us at support@example.com or call +371 11 111 111.",
+    "hours": "Our support is available Monday-Friday, 9AM-6PM.",
+    "default": "I'm here to help! Try: hello, products, price, shipping, contact, hours."
+}
+
 def get_db():
     conn = sqlite3.connect("data_b.db")
     conn.row_factory = sqlite3.Row
@@ -101,3 +112,19 @@ def search():
         })
 
     return jsonify({"products": products})
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.get_json() or {}
+    user_message = data.get("message", "") or ""
+    user_message = user_message.lower().strip()
+
+    # keyword matching
+    response = CHAT_RESPONSES.get("default")
+    for key in CHAT_RESPONSES:
+        if key != "default" and key in user_message:
+            response = CHAT_RESPONSES[key]
+            break
+
+    # Return response and available options
+    return jsonify({"response": response, "options": list(CHAT_RESPONSES.keys())})
