@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - AutoPremium</title>
+    
+    <link rel="stylesheet" href="../static/home.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">
+            <i class="fa-solid fa-car-side"></i> Chertolet.lv
+        </a>
+        
+        <nav class="nav-menu">
+            <a href="index.html">Catalog</a>
+            <a href="#">Pakalpojumi</a>
+            <a href="#">Credit</a>
+            <a href="#">Atsauksmes</a>
+            <a href="#">Par mums</a>
+        </nav>
+
+        <a href="#" class="btn-reg btn-login-mode">Login</a>
+    </header>
+
+    <main class="auth-page">
+        <section class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2>Create an account</h2>
+                    <p>Join the Chertolet.lv community</p>
+                </div>
+
+                <form class="auth-form">
+                    <div class="input-group">
+                        <label for="name">Your name</label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" id="name" placeholder="Ivan" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email adress</label>
+                        <div class="input-wrapper">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" id="email" placeholder="name@example.com" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="phone">Phone number</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" id="phone" placeholder="+371 11 111 111">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="password" placeholder="Create a strong password" required>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agree" required>
+                        <label for="agree">I agree with <a href="#">data processing terms</a></label>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Register</button>
+
+                    <div class="auth-divider">
+                        <span>or</span>
+                    </div>
+
+                    <div class="social-auth">
+                        <button type="button" class="btn-social google"><i class="fa-brands fa-google"></i> Google</button>
+                        <button type="button" class="btn-social apple"><i class="fa-brands fa-apple"></i> Apple</button>
+                    </div>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#">Login</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom: 20px;">
+                    <i class="fa-solid fa-car-side"></i> Chertolet.lv
+                </a>
+                <p>For over 10 years, we’ve been helping people buy and sell cars safely, offering the best deals and fully verified vehicles.</p>
+            </div>
+            <div class="footer-col">
+                <h4>For buyers</h4>
+                <ul>
+                    <li><a href="#">Car catalog</a></li>
+                    <li><a href="#">Trade-in</a></li>
+                    <li><a href="#">Auto loan</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacts</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> +371 11 111 111</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Jūrmala, Kauguri, 10</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Follow us on social media</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-vk"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Chertolet.lv. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
