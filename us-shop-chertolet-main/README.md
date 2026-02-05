@@ -1,2 +1,0 @@
-# us-shop-chertolet
-# test
