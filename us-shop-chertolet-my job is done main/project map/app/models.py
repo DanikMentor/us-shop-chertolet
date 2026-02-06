@@ -35,21 +35,21 @@ def cr_d():
     conn = sqlite3.connect("data_b.db")
     cursor = conn.cursor()
     sample_products =  [
-        ("Toyota Camry", "24000", "Sedan", "Toyota", "2022-01-15", "5%"),
-        ("Honda Accord", "26000", "Sedan", "Honda", "2022-03-22", "7%"),
-        ("Ford F-150", "30000", "Truck", "Ford", "2021-11-10", "10%"),
-        ("Chevrolet Silverado", "32000", "Truck", "Chevrolet", "2022-02-05", "8%"),
-        ("BMW X5", "60000", "SUV", "BMW", "2022-04-12", "6%"),
-        ("Audi Q7", "65000", "SUV", "Audi", "2021-12-30", "9%"),
-        ("Mercedes-Benz C-Class", "55000", "Sedan", "Mercedes-Benz", "2022-05-20", "4%"),
-        ("Nissan Altima", "23000", "Sedan", "Nissan", "2022-03-18", "5%"),
-        ("Jeep Grand Cherokee", "40000", "SUV", "Jeep", "2021-10-25", "11%"),
-        ("Ram 1500", "35000", "Truck", "Ram", "2022-01-08", "7%")
+        ("Toyota Camry", "24000", "Sedan", "Toyota", "2022-01-15", "5%","Otli4naja masina o4en nravitsa moja mama eden na tojote uze mnogo let vrode ese ne slomalas"),
+        ("Honda Accord", "26000", "Sedan", "Honda", "2022-03-22", "7%","Koro4e gemini skazal 4to honda t1 4to u neje o4en krytoi motor a tak ka gemini umnij ja emy very"),
+        ("Ford F-150", "30000", "Truck", "Ford", "2021-11-10", "10%","Ford krytaja masina mne o4en nravitsa pomnu vidos na jutube pro ford smotrel tolko eto bilo davno ja uze ni4ego ne pomnu :(( ))"),
+        ("Chevrolet Silverado", "32000", "Truck", "Chevrolet", "2022-02-05", "8%","OOOO chertole Silverado odna iz samih znamenetih i popularnih masin na saite.Objazatelko k pokupke esli vi javlajetes elitnim predstovitelem chertolet community"),
+        ("BMW X5", "60000", "SUV", "BMW", "2022-04-12", "6%","BMW prikolnijie takije masini esli vi urod kotorij lubit gonat na trasse obsetvenogo polzovanije rekomenduyu k pokupke"),
+        ("Audi Q7", "65000", "SUV", "Audi", "2021-12-30", "9%","Audi — это «технологическое превосходство» (их знаменитый слоган Vorsprung durch Technik). Для площадки вроде Chertolet.lv это машины высшего эшелона, которые всегда привлекают внимание."),
+        ("Mercedes-Benz C-Class", "55000", "Sedan", "Mercedes-Benz", "2022-05-20", "4%","Prikolnaja masina na kartinke iz gugla vigladit stilno a style eto samij vaznij parametr tak 4to eto top za lubije dengi"),
+        ("Nissan Altima", "23000", "Sedan", "Nissan", "2022-03-18", "5%","Ne stoit pokupat etu masinu ona malo stoit a zna4it ja zarabotaju malo deneg"),
+        ("Jeep Grand Cherokee", "40000", "SUV", "Jeep", "2021-10-25", "11%","Krytoi car kotorij pozvolajiet ehat po griazi i kryto davit opredelennih person.No lutse tak ne delat tak kak mozno sest na zonu :) "),
+        ("Ram 1500", "35000", "Truck", "Ram", "2022-01-08", "7%","Krytoi gruzak mne o4en nravitsa kuzov bolsoi kak raz dla mojego dryga sani korotij lubit v kuzove katatsa")
     ]
 
     cursor.executemany("""
-    INSERT INTO products (Pr_name, Price, Category, Brand, Date, Discount)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO products (Pr_name, Price, Category, Brand, Date, Discount,DESCRIPTION)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
     """, sample_products)
 
     conn.commit()
