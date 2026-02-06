@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chertolet.lv - auto pārdošana</title>
+    
+    <link rel="stylesheet" href="../static/home.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">
+            Chertolet.lv
+        </a>
+    
+        <nav class="nav-menu">
+        <a href="#">Catalog</a>
+        <a href="#">Services</a>
+        <a href="#">Credit</a>
+        <a href="#">Reviews</a>
+        <a href="#">About us</a>
+    </nav>
+
+    <div class="auth-buttons">
+            <a href="/" class="btn-reg">home page</a>
+
+    </div>
+</header>
+
+    <main>
+        <main class="chat-container">
+    <div class="chat-wrapper">
+        <div class="chat-header">
+            <h2>Успешный и знаменитый глава чертолёта к вашим услугам!</h2>
+        </div>
+        
+        <div class="chat-window" id="chatWindow">
+            <div class="message ai">
+                Здарова это я глава чертолёта и я очень занятой человек так что скажи спасибо что я нашёл несколько минут в своём плотном графике дабы тебе ответить высокоуважаемый покупатель
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="userInput" placeholder="Введите ваш вопрос здесь...">
+            <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</main>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom: 20px;">
+                    Chertolet.lv
+                </a>
+                <p>
+                    For over 10 years, we’ve been helping people buy and sell cars safely, offering the best deals and fully verified vehicles.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>For buyers</h4>
+                <ul>
+                    <li><a href="#">Car catalog</a></li>
+                    <li><a href="#">Trade-in</a></li>
+                    <li><a href="#">Auto loan</a></li>
+                    <li><a href="#">Insurance</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacts</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> +371 11 111 111</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Jūrmala, Kauguri, 10</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@chertolet.lv</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Follow us on social media</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-vk"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Chertoler.lv. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+    const sendBtn = document.getElementById('sendBtn');
+    const userInput = document.getElementById('userInput');
+    const chatWindow = document.getElementById('chatWindow');
+
+    async function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // 1. Рисуем сообщение пользователя
+        appendMessage(message, 'user');
+        userInput.value = '';
+
+        try {
+            // 2. Стучимся к твоему Python-серверу
+            const response = await fetch('/chat_with_chertolet', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json();
+            
+            // 3. Рисуем ответ от ИИ (Главы)
+            appendMessage(data.response, 'ai');
+        } catch (error) {
+            appendMessage("Слушай, чет инет залагал. Попробуй еще раз!", 'ai');
+        }
+    }
+
+    function appendMessage(text, side) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${side}`;
+        msgDiv.innerText = text;
+        chatWindow.appendChild(msgDiv);
+        
+        // Авто-скролл вниз, чтобы видеть новые сообщения
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    // Слушаем клик и Enter
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });  //этот дж фулл вайб код если как нейронку прикрутить и всё остальное я разобрался как сделать а разбираться как работает дж я не хочу но в будущем наверняка когда нибудь разберусь
+</script>
+</body>
+</html>
