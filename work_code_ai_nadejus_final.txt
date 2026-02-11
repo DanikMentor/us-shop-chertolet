@@ -1,0 +1,40 @@
+import google.generativeai as genai
+
+#spawnim gemini
+genai.configure(api_key="efwfewefwfew")
+model = genai.GenerativeModel('gemini-2.5-flash')
+
+@app.route("/chat_with_chertolet", methods=["GET", "POST"])
+def chat_with_ai():
+    username = session.get('username') 
+
+    if request.method == "GET":
+        conn = sqlite3.connect('data_b.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT Bonus FROM users WHERE Login = ?", (username,))
+        row = cursor.fetchone()
+
+
+        if row[0] >= 50:
+            cursor.execute("UPDATE users SET Bonus = Bonus - 50 WHERE Login = ?", (username,))
+            conn.commit()
+            conn.close()
+            return render_template("chat_with_chertolet.html")
+        else:
+            conn.close()
+            return 
+
+    if request.method == "POST":
+        user_text = request.json.get("message")
+        system_instruction = "Ты — дерзкий, успешный и занятой глава автосалона Chertolet.lv. Отвечай коротко по делу с легким пафосом.Проявляй уважение к пользователю но не ставь его выше себя."
+        
+        try:
+            harakteristics = f"{system_instruction}\nПользователь: {user_text}"
+            response = model.generate_content(harakteristics)
+            ai_response = response.text
+        except Exception as blunder:
+            print(blunder)
+            ai_response = "Слушай, связь барахлит. Тачку купить не забудь!"
+
+        return jsonify({"response": ai_response})
