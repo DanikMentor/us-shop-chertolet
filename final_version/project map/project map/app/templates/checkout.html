@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Chertolet.lv</title>
+    <link rel="stylesheet" href="../static/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .checkout-hero {
+            background: linear-gradient(to bottom, #1e293b 0%, var(--bg-light) 100%);
+            padding: 40px 5% 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .checkout-hero h1 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .checkout-hero p {
+            color: #d3dce9;
+            font-size: 1rem;
+        }
+
+        .checkout-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 40px;
+        }
+
+        .checkout-form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .checkout-form-section h2 {
+            margin-bottom: 25px;
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkout-form-section h2 i {
+            color: var(--secondary-accent);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: white;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-section-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 25px 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .hidden-section {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .order-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .order-summary h2 {
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-summary h2 i {
+            color: var(--secondary-accent);
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+        }
+
+        .order-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .order-item-title {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .order-item-price {
+            color: var(--secondary-accent);
+            font-weight: 600;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid var(--secondary-accent);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .order-total-price {
+            color: var(--secondary-accent);
+            font-size: 1.3rem;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary-accent) 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 60px 5% 20px;
+            font-size: 0.9rem;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .checkout-hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            Chertolet.lv
+        </a>
+        <a href="/" class="btn-reg">Home page</a>
+    </header>
+
+    <section class="checkout-hero">
+        <h1>Checkout</h1>
+        <p>Complete your order securely</p>
+    </section>
+
+    <div class="checkout-wrapper">
+        <div class="checkout-container">
+            <div class="checkout-form-section">
+                <h2><i class="fas fa-user"></i> Personal Information</h2>
+
+                <form id="checkoutForm">
+                    <div class="form-group">
+                        <label>User *</label>
+                        <input id="name" placeholder="User" required value="{{ user.Login if user else '' }}">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input id="phone" placeholder="+371 XX XXX XXX" required value="{{ user.Phone_n if user else '' }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input id="email" type="email" placeholder="your@email.com" required value="{{ user.Mail if user else '' }}">
+                    </div>
+
+                    <div class="form-section-divider"></div>
+                    <h2 style="margin-top: 20px;"><i class="fas fa-truck"></i> Delivery Method</h2>
+
+                    <div class="form-group">
+                        <label>Select Delivery Option *</label>
+                        <select id="delivery" required>
+                            <option value="get it in salon">In salon</option>
+                            <option value="delivery to home">Delivery to home</option>
+                        </select>
+                    </div>
+
+                    <div id="addressSection" style="display:none;" class="hidden-section">
+                        <div class="form-group">
+                            <label>Delivery Address *</label>
+                            <input id="address" placeholder="Street, house number, city">
+                        </div>
+                    </div>
+
+                    <div class="form-section-divider"></div>
+                    <h2 style="margin-top: 20px;"><i class="fas fa-credit-card"></i> Payment Method</h2>
+
+                    <div class="form-group">
+                        <label>Select Payment Method *</label>
+                        <select id="payment" required>
+                            <option value="card">Credit/Debit Card</option>
+                            <!-- <option value="bank">Bank Transfer</option> -->
+                            <option value="cash">Cash</option>
+                        </select>
+                    </div>
+
+                    <div id="cardSection" style="display:none;" class="hidden-section">
+                        <div class="form-group">
+                            <label>Card Number *</label>
+                            <input id="card_number" placeholder="1234 5678 9012 3456">
+                        </div>
+
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Expiry (MM/YY) *</label>
+                                <input id="card_expiry" placeholder="12/25">
+                            </div>
+                            <div class="form-group">
+                                <label>CVV *</label>
+                                <input id="card_cvv" placeholder="123">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-check-circle"></i> Complete Order
+                    </button>
+                </form>
+            </div>
+
+            <div class="order-summary">
+                <h2><i class="fas fa-shopping-bag"></i> Order Summary</h2>
+
+                <div id="cart-items-summary"></div>
+
+                <div class="order-total">
+                    <span>Total:</span>
+                    <span class="order-total-price" id="order-total">0 €</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="/" class="logo" style="margin-bottom: 20px;">
+                    <img src="{{ url_for('static', filename='img/photo_2026-01-27_18-45-25.jpg') }}" style="height: 40px; border-radius: 20px;"> Chertolet.lv
+                </a>
+                <p>
+                    For over 10 years, we've been helping people buy and sell cars safely, offering the best deals and fully verified vehicles.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>For buyers</h4>
+                <ul>
+                    <li><a href="#">Car catalog</a></li>
+                    <li><a href="#">Trade-in</a></li>
+                    <li><a href="#">Auto loan</a></li>
+                    <li><a href="#">Insurance</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacts</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> +371 11 111 111</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Jūrmala, Kauguri, 10</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@chertolet.lv</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Follow us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-vk"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Chertolet.lv. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function updateOrderSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const container = document.getElementById('cart-items-summary');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<div class="empty-cart-message">Your cart is empty</div>';
+                document.getElementById('order-total').textContent = '0 €';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                html += `
+                    <div class="order-item">
+                        <span class="order-item-title">${item.title}</span>
+                        <span class="order-item-price">${Number(item.price).toLocaleString()} €</span>
+                    </div>
+                `;
+                total += Number(item.price) || 0;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('order-total').textContent = total.toLocaleString() + ' €';
+        }
+
+        updateOrderSummary();
+    </script>
+
+    <script src="{{ url_for('static', filename='checkout.js') }}"></script>
+</body>
+</html>

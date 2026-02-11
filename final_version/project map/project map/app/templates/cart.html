@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Chertolet.lv</title>
+    <link rel="stylesheet" href="../static/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .cart-hero {
+            background: linear-gradient(to bottom, #1e293b 0%, var(--bg-light) 100%);
+            padding: 40px 5% 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .cart-hero h1 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .cart-hero p {
+            color: #d3dce9;
+            font-size: 1rem;
+        }
+
+        .cart-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+        }
+
+        .cart-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+
+        .cart-items-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 200px;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 60px 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state a {
+            display: inline-block;
+            padding: 10px 30px;
+            background: var(--primary-accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .cart-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cart-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cart-summary-title {
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cart-summary-title i {
+            color: var(--secondary-accent);
+        }
+
+        .cart-info {
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary-accent);
+        }
+
+        .cart-info p {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cart-info p span {
+            font-weight: 700;
+            color: var(--secondary-accent);
+        }
+
+        .cart-total-section {
+            padding-top: 20px;
+            border-top: 2px solid var(--secondary-accent);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+        }
+
+        .cart-total span:last-child {
+            color: var(--secondary-accent);
+            font-size: 1.5rem;
+        }
+
+        .cart-summary-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-checkout {
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary-accent) 0%, #2563eb 100%);
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .btn-clear {
+            padding: 12px;
+            background: #f1f5f9;
+            color: var(--text-dark);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-clear:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+    margin: 0;
+}
+
+.cart-wrapper {
+    flex: 1; 
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+}
+
+
+footer {
+    background-color: #0f172a;
+    color: #94a3b8;
+    padding: 60px 5% 20px; 
+    font-size: 0.9rem;
+    margin-top: auto; 
+}
+//опять работать 
+
+
+        @media (max-width: 768px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary {
+                position: static;
+            }
+
+            .cart-hero h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            Chertolet.lv
+        </a>
+        <div class="header-actions">
+            <a href="/register" class="btn-reg">Registrācija</a>
+        </div>
+    </header>
+
+    <section class="cart-hero">
+        <h1><i class="fas fa-shopping-cart"></i> Your Shopping Cart</h1>
+        <p>Review and manage your selected vehicles</p>
+    </section>
+
+    <div class="cart-wrapper">
+        <main class="cart-container">
+            <div class="cart-items-section">
+                <div id="cart-items"></div>
+            </div>
+
+            <div class="cart-summary">
+                <div class="cart-summary-title">
+                    <i class="fas fa-tag"></i> Order Summary
+                </div>
+
+                <div class="cart-info">
+                    <p>
+                        <span>Items:</span>
+                        <span id="cart-count-total">0</span>
+                    </p>
+                    <p>
+                        <span>Models</span>
+                    </p>
+                </div>
+
+                <div class="cart-total-section">
+                    <div class="cart-total">
+                        <span>Total:</span>
+                        <span id="cart-total">0 €</span>
+                    </div>
+
+                    <div class="cart-summary-actions">
+                        <button id="checkout-btn" class="btn-checkout">
+                            <i class="fas fa-credit-card"></i> Proceed to Checkout
+                        </button>
+                        <button id="clear-cart" class="btn-clear">
+                            <i class="fas fa-trash"></i> Clear Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="/" class="logo" style="margin-bottom: 20px;">
+                    <img src="{{ url_for('static', filename='img/photo_2026-01-27_18-45-25.jpg') }}" style="height: 40px; border-radius: 20px;"> Chertolet.lv
+                </a>
+                <p>
+                    For over 10 years, we've been helping people buy and sell cars safely, offering the best deals and fully verified vehicles.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>For buyers</h4>
+                <ul>
+                    <li><a href="#">Car catalog</a></li>
+                    <li><a href="#">Trade-in</a></li>
+                    <li><a href="#">Auto loan</a></li>
+                    <li><a href="#">Insurance</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacts</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> +371 11 111 111</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Jūrmala, Kauguri, 10</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@chertolet.lv</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Follow us</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-vk"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Chertolet.lv. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../static/cart.js"></script>
+
+    <script>
+        const checkoutBtn = document.getElementById('checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener('click', () => {
+                const isLoggedIn = {{ 'true' if session.get('user_id') else 'false' }};
+                if (!isLoggedIn) {
+                    alert('Please log in to proceed to checkout');
+                    window.location.href = '/login';
+                } else {
+                    window.location.href = '/checkout';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

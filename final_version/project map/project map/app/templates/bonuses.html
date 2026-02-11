@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chertolet.lv - Bonuses</title>
+    
+    <link rel="stylesheet" href="../static/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        .bonus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px 0;
+            align-items: stretch;
+        }
+
+
+        .bonus-card {
+            background: #1a1a1d; 
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column; 
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .bonus-card:hover {
+            transform: translateY(-5px);
+            border-color: #FFD700;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+
+        .bonus-info {
+            flex-grow: 1;
+        }
+
+        .bonus-card h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.25rem;
+            color: #fff;
+        }
+
+        .bonus-price {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.1);
+            color: #FFD700;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .bonus-description {
+            color: #b2bec3;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .btn-main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .btn-fortune, .btn-chat {
+            background: linear-gradient(135deg, #FFD700 0%, #ffb900 100%);
+            color: #1a1a1d;
+        }
+        
+        .btn-fortune:hover, .btn-chat:hover {
+            background: linear-gradient(135deg, #ffe033 0%, #ffd500 100%);
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #fff;
+            color: #000;
+            transform: scale(1.02);
+        }
+
+        .btn-disabled {
+            background: #2d2d2d;
+            color: #666;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="logo">
+            Chertolet.lv
+        </a>
+        <nav class="nav-menu">
+            <a href="/efwfwe">Catalog</a>
+            <a href="/wfeefwfwe">Services</a>
+            <a href="/fwewfewfe">Credit</a>
+            <a href="/fewwef">Reviews</a>
+            <a href="/fewefw">About us</a>
+        </nav>
+        <a href="/" class="btn-reg">Home page</a>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <h1 class="hero-title">Bonuses & Special Offers</h1>
+        </section>
+
+        <div class="bonus-grid">
+            <article class="bonus-card">
+                <div class="bonus-info">
+                    <h2>🎡 Fortune Wheel</h2>
+                    <span class="bonus-price">1 bonus</span>
+                    <p class="bonus-description">Испытай удачу и получи крутой приз в нашей лотерее!</p>
+                </div>
+                {% if bonuses >= 1 %}
+                    <a href="/fortune_wheel" class="btn-main btn-fortune">Griezt ratu</a>
+                {% else %}
+                    <button class="btn-main btn-disabled" disabled>Недостаточно</button>
+                {% endif %}
+            </article>
+
+            <article class="bonus-card">
+                <div class="bonus-info">
+                    <h2>🎁 Чат с главой</h2>
+                    <span class="bonus-price">50 bonuses</span>
+                    <p class="bonus-description">Личный разговор с боссом Chertolet. Задай любой вопрос напрямую!</p>
+                </div>
+                {% if bonuses >= 50 %}
+                    <a href="/chat_with_chertolet" class="btn-main btn-chat">Пора болтать!</a>
+                {% else %}
+                    <button class="btn-main btn-disabled" onclick="alert('Маловато бонусов!')">Недостаточно</button>
+                {% endif %}
+            </article>
+
+            <article class="bonus-card">
+                <div class="bonus-info">
+                    <h2>👨‍🍳 Grandma's recipe</h2>
+                    <span class="bonus-price">30 bonuses</span>
+                    <p class="bonus-description">Секретный рецепт от бабушки Костика. Только для своих!</p>
+                </div>
+                <button class="btn-main btn-secondary" onclick="openVideo()">Activate bonus</button>
+            </article>
+
+            <article class="bonus-card">
+                <div class="bonus-info">
+                    <h2>🤫 Secret Info</h2>
+                    <span class="bonus-price">20 bonuses</span>
+                    <p class="bonus-description">То, что скрывают другие. Узнай инсайды компании Chertolet.</p>
+                </div>
+                <a href="/secret-info" class="btn-main btn-secondary">
+                Activate bonus
+                </a>
+
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo" style="margin-bottom: 20px;">Chertolet.lv</a>
+                <p>For over 10 years, we’ve been helping people buy and sell cars safely.</p>
+            </div>
+            <div class="footer-col">
+                <h4>For buyers</h4>
+                <ul>
+                    <li><a href="#">Car catalog</a></li>
+                    <li><a href="#">Trade-in</a></li>
+                    <li><a href="#">Auto loan</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacts</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> +371 11 111 111</li>
+                    <li><i class="fa-solid fa-location-dot"></i> Jūrmala, Kauguri, 10</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Chertoler.lv. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="videoModal" class="video-modal">
+        <div class="video-content">
+            <span class="close-btn" onclick="closeVideo()">&times;</span>
+            <iframe width="100%" height="450" src="https://www.youtube.com/embed/LQ1RVX0F0ZM" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openVideo() { document.getElementById('videoModal').style.display = 'flex'; }
+        function closeVideo() { document.getElementById('videoModal').style.display = 'none'; }
+
+        async function updateBalance() {
+            try {
+                const response = await fetch('/get_wheel_bonuses');
+                const data = await response.json();
+                if (data.bonuses !== undefined) {
+                    const balanceElement = document.getElementById('current-balance');
+                    if (balanceElement) balanceElement.innerText = data.bonuses;
+                }
+            } catch (error) { console.error('Error:', error); }
+        }
+        window.addEventListener('focus', updateBalance);
+    </script>
+</body>
+</html>
